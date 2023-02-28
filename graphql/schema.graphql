@@ -1,0 +1,25 @@
+type Company {
+    id: ID!
+    name: String!
+    parent: Company @belongsTo
+    stations: [Station!]! @field(resolver: "App\\Models\\Company@stationsResolver")
+    children: [Company!]! @field(resolver: "App\\Models\\Company@childrenResolver")
+}
+
+type Station {
+    id: ID!
+    name: String!
+    lat: Float
+    lng: Float
+    distance: Float
+    company: Company @belongsTo
+}
+
+type Query {
+
+    company(id: ID! @eq): Company @find
+    companies: [Company!]! @all
+
+    station(id: ID! @eq): Station @find
+    stations (radius: Int, lat:Float, lng:Float): [Station!]! # @all // Test using 37.50162296358696, -120.81869417649496
+}
